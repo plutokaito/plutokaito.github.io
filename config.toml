@@ -1,4 +1,4 @@
-baseURL = "https://kaitshy.github.io"
+baseURL = "http://plutokaito.github.io"
 languageCode = "ZH-CN"
 title = "KaitoShy's 万事屋"
 theme ="anatole"
