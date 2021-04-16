@@ -1,9 +1,14 @@
 baseURL = "http://plutokaito.github.io"
-languageCode = "ZH-CN"
+languageCode = "en"
+DefaultContentLanguage = "cn"
 title = "KaitoShy's 万事屋"
 theme ="anatole"
 enableEmoji = true
 enableRobotsTXT = true
+summarylength = 1
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+pygmentsCodefencesGuessSyntax = true
 
 [params]
 title="I'm KaitoShy"
@@ -13,6 +18,8 @@ keywords="java php go"
 fullPostContent = false
 mainSections = ["post"]
 profilePicture = "images/avatar.png"
+doNotLoadAnimations = false
+readMore = true
 
 [[params.socialIcons]]
 icon = "fab fa-github"
@@ -24,33 +31,38 @@ icon = "fas fa-envelope"
 title = "e-mail"
 url = "mailto:kaito78@163.com"
 
+## Math settings
+[params.math]
+enable = false  # options: true, false. Enable math support globally, default: false. You can always enable math on per page.
+use = "katex"  # options: "katex", "mathjax". default is "katex".
+
 [menu]
   [[menu.main]]
-  name = "Home"
+  name = "主页(Home)"
   identifier = "home"
   weight = 100
   url = "/"
 
   [[menu.main]]
-  name = "Posts"
+  name = "博客(Blog)"
   weight = 200
-  identifier = "posts"
+  identifier = "post"
   url = "/post/"
 
   [[menu.main]]
-  name = "About"
+  name = "关于(About)"
   weight = 300
   identifier = "about"
   url = "/about/"
 
   [[menu.main]]
-  name = "Contact"
+  name = "联系(Contact)"
   weight = 400
   identifier = "contact"
   url = "/contact/"
 
   [[menu.main]]
-  name="tags"
+  name="标签(tags)"
   weight=400
   identifier="tags"
   url="/tags/"
