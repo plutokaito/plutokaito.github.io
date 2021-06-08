@@ -21,6 +21,8 @@ profilePicture = "images/avatar.png"
 doNotLoadAnimations = false
 readMore = true
 displayMode = "dark"
+copyright = "KaitoShy 2021 - {{ YEAR }}"
+
 
 [[params.socialIcons]]
 icon = "fab fa-github"
