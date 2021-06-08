@@ -14,12 +14,13 @@ pygmentsCodefencesGuessSyntax = true
 title="I'm KaitoShy"
 author="KaitoShy"
 description = "Java And PHP Developer"
-keywords="java php go"
+keywords="java php"
 fullPostContent = false
 mainSections = ["post"]
 profilePicture = "images/avatar.png"
 doNotLoadAnimations = false
 readMore = true
+displayMode = "dark"
 
 [[params.socialIcons]]
 icon = "fab fa-github"
@@ -30,6 +31,9 @@ url = "https://github.com/plutokaito"
 icon = "fas fa-envelope"
 title = "e-mail"
 url = "mailto:kaito78@163.com"
+
+[params.simpleAnalytics]
+enable = true
 
 ## Math settings
 [params.math]
