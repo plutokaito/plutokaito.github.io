@@ -12,7 +12,7 @@ description : "这篇文章讲述的是 CAP 的基础理论。"
 # 什么是 CAP 理论
 
 
-CAP 定理又被称为布鲁尔定理。只有在互联和共享数据的分布式系统中讨论 CAP 才会有意义，由此可以看出 CAP 讨论的是对数据的读写操作，而非是费不是系统的全部。
+CAP 定理又被称为布鲁尔定理。只有在互联和共享数据的分布式系统中讨论 CAP 才会有意义，由此可以看出 CAP 讨论的是对数据的读写操作，它关注的粒度是数据，而不是整个系统。当我们落地实践时，需要将系统内的数据按照不同应用场景和要求进行分类，每类数据选择不同的策略（AP 还是 CP）, 而不是直接限定整个系统所有数据都是同一个策略。
 
 
 C: Consistency(一致性):
@@ -53,13 +53,15 @@ P: Partition Tolerance (分区容忍性):
 
 - CP ： 一致性和分区容忍性
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2734050/1624242751996-188c39d7-08f4-4ba1-8614-3d031dd52c4d.png#height=180&id=Yt8WK&margin=%5Bobject%20Object%5D&name=image.png&originHeight=364&originWidth=523&originalType=binary&ratio=1&size=21773&status=done&style=none&width=259)
+![image.png](/images/post/architecture/cap/cp.png)
+
 A1 当更新 x 的值为 3 时， A2 此时还是 x = 2, 当 client 去读该系统的 x 值， 按照一致性原则，此时应该返回 Error， 这样就不满足了可用性了。 
 
 
 - AP:  可用性和分区容忍性
 
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/2734050/1624242954429-20bb87e1-acc8-492a-a0ce-1fffd18193f6.png#height=174&id=dNvCz&margin=%5Bobject%20Object%5D&name=image.png&originHeight=398&originWidth=529&originalType=binary&ratio=1&size=21802&status=done&style=none&width=231)
+![image.png](/images/post/architecture/cap/ap.png)
+
 A1 更新 x = 3时， A2 还是 x = 2， 当 client 去读该系统的 x 的值时, 按照 A 可用性来说，此时返回不是应该 error 或者超时，而是一个合理的值 2。
 ​
 
