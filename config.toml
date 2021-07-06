@@ -22,6 +22,7 @@ doNotLoadAnimations = false
 readMore = true
 displayMode = "dark"
 copyright = "KaitoShy 2021 - {{ YEAR }}"
+contentratio = 0.7
 
 
 [[params.socialIcons]]
