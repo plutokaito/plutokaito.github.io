@@ -1,0 +1,84 @@
+<!doctype html><html dir=ltr lang=cn data-theme=dark><head><title>KaitoShy | ELK 在开发机上的安装</title><meta charset=utf-8><meta name=generator content="Hugo 0.82.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="该篇文章主要讲述的是 7.13.3 版本 ELK 的 WIN 安装"><meta name=google-site-verification content="L6xe0i6HBiJAWiH5QHEw9sqEVLcBuUl5vn_4ZkCprXw"><link rel=stylesheet href=/css/main.min.69a557b4fc895e1566037155c2b37c752bb8ccf82803bf8551c60ae44f0f4e23.css integrity="sha256-aaVXtPyJXhVmA3FVwrN8dSu4zPgoA7+FUcYK5E8PTiM=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=canonical href=/post/es_install/><script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script><script type=text/javascript src=/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="ELK 在开发机上的安装"><meta name=twitter:description content="该篇文章主要讲述的是 7.13.3 版本 ELK 的 WIN 安装"></head><body><div class="sidebar animated fadeInDown"><div class=logo-title><div class=title><img src=/images/avatar.png alt="profile picture"><h3 title><a href=/>I'm KaitoShy</a></h3><div class=description><p>Java And PHP Developer</p></div></div></div><ul class=social-links><li><a href=https://github.com/plutokaito rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:kaito78@163.com rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; KaitoShy 2021 - 2021</div></div></div><div class=main><div class="page-top animated fadeInDown"><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>主页(Home)</a></li><li><a href=/post/ title>博客(Blog)</a></li><li><a href=/about/ title>关于(About)</a></li><li><a href=/tags/ title>标签(tags)</a></li><li><a href=/contact/ title>联系(Contact)</a></li><li class=theme-switch-item><a class=theme-switch title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post animated fadeInDown"><div class=post-content><div class=post-title><h3>ELK 在开发机上的安装</h3><div class=info><em class="fas fa-calendar-day"></em><span class=date>Tue, Jul 13, 2021</span>
+<em class="fas fa-stopwatch"></em><span class=reading-time></span></div></div><p>ELK 主要的使用场景为日志分析和搜索引擎。</p><p>那么接下来讲述的是 <code>7.13.3</code> 版本 ELK 在 WINDOWS 机子上的安装和使用。</p><h2 id=elasticsearch>ElasticSearch</h2><h3 id=下载安装>下载安装</h3><p>从<a href=https://www.elastic.co/cn/downloads/elasticsearch>官网下载</a>，当前版本为 7.13.3， 下载到自己的合适的位置。解压缩文件，打开文件夹：</p><p><img src=/images/post/es/1.png alt="es 文件夹"></p><p>从文件夹中我们可以看到 bin 中包含了启动文件。双击 <code>bin/elasticsearch.bat</code> 文件，将应用跑起来，</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>[2021-07-09T14:00:29,469][INFO ][o.e.h.AbstractHttpServerTransport] [kaitoshy-WIN10] publish_address {127.0.0.1:9200}, bound_addresses {127.0.0.1:9200}, {[::1]:9200}
+[2021-07-09T14:00:29,471][INFO ][o.e.n.Node ] [kaitoshy-WIN10)] started
+</code></pre></div><p>当 cmd 终端中有这么几行日志时，说明 es 已经启动了。</p><h3 id=验证是否安装成功>验证是否安装成功</h3><p>打开浏览器， 输入地址： localhost:9200, 浏览器中显示为：</p><div class=highlight><pre class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+  <span class=nt>&#34;name&#34;</span> <span class=p>:</span> <span class=s2>&#34;kaitoshy-WIN10&#34;</span><span class=p>,</span>
+  <span class=nt>&#34;cluster_name&#34;</span> <span class=p>:</span> <span class=s2>&#34;elasticsearch&#34;</span><span class=p>,</span>
+  <span class=nt>&#34;cluster_uuid&#34;</span> <span class=p>:</span> <span class=s2>&#34;js6aXzpiTve6M5OI9ippMg&#34;</span><span class=p>,</span>
+  <span class=nt>&#34;version&#34;</span> <span class=p>:</span> <span class=p>{</span>
+    <span class=nt>&#34;number&#34;</span> <span class=p>:</span> <span class=s2>&#34;7.13.3&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;build_flavor&#34;</span> <span class=p>:</span> <span class=s2>&#34;default&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;build_type&#34;</span> <span class=p>:</span> <span class=s2>&#34;zip&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;build_hash&#34;</span> <span class=p>:</span> <span class=s2>&#34;5d21bea28db1e89ecc1f66311ebdec9dc3aa7d64&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;build_date&#34;</span> <span class=p>:</span> <span class=s2>&#34;2021-07-02T12:06:10.804015202Z&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;build_snapshot&#34;</span> <span class=p>:</span> <span class=kc>false</span><span class=p>,</span>
+    <span class=nt>&#34;lucene_version&#34;</span> <span class=p>:</span> <span class=s2>&#34;8.8.2&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;minimum_wire_compatibility_version&#34;</span> <span class=p>:</span> <span class=s2>&#34;6.8.0&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;minimum_index_compatibility_version&#34;</span> <span class=p>:</span> <span class=s2>&#34;6.0.0-beta1&#34;</span>
+  <span class=p>},</span>
+  <span class=nt>&#34;tagline&#34;</span> <span class=p>:</span> <span class=s2>&#34;You Know, for Search&#34;</span>
+<span class=p>}</span>
+</code></pre></div><h3 id=高可用>高可用</h3><p>如果需要在开发机上运行多个 Elasticsearch 实例，可以在 ES_PATH/bin 使用以下命令：</p><div class=highlight><pre class=chroma><code class=language-powershell data-lang=powershell><span class=p>.\</span><span class=n>elasticsearch</span><span class=p>.</span><span class=n>bat</span> <span class=n>-E</span> <span class=n>node</span><span class=p>.</span><span class=n>name</span><span class=p>=</span><span class=n>node1</span> <span class=n>-E</span> <span class=n>cluster</span><span class=p>.</span><span class=n>name</span><span class=p>=</span><span class=n>kaitoshy</span> <span class=n>-E</span> <span class=n>path</span><span class=p>.</span><span class=n>data</span><span class=p>=</span><span class=n>node1_data</span>
+<span class=p>.\</span><span class=n>elasticsearch</span><span class=p>.</span><span class=n>bat</span> <span class=n>-E</span> <span class=n>node</span><span class=p>.</span><span class=n>name</span><span class=p>=</span><span class=n>node2</span> <span class=n>-E</span> <span class=n>cluster</span><span class=p>.</span><span class=n>name</span><span class=p>=</span><span class=n>kaitoshy</span> <span class=n>-E</span> <span class=n>path</span><span class=p>.</span><span class=n>data</span><span class=p>=</span><span class=n>node2_data</span>
+<span class=p>.\</span><span class=n>elasticsearch</span><span class=p>.</span><span class=n>bat</span> <span class=n>-E</span> <span class=n>node</span><span class=p>.</span><span class=n>name</span><span class=p>=</span><span class=n>node3</span> <span class=n>-E</span> <span class=n>cluster</span><span class=p>.</span><span class=n>name</span><span class=p>=</span><span class=n>kaitoshy</span> <span class=n>-E</span> <span class=n>path</span><span class=p>.</span><span class=n>data</span><span class=p>=</span><span class=n>node3_data</span>
+</code></pre></div><p>可以尝试着用 <code>localhost:9201</code>,<code>localhost:9202</code>, <code>localhost:9203</code> 访问，由于我之前开了 9200 的端口。为什么在一台机器上启动多个节点不需要指定不同的端口呢？在没有绑定 host 的 ip 时， 采取的是 dev mode 启动，这个模式下会在一定范围内分配端口。</p><blockquote><p>ps: 这里需要注意的是当 es 设置为单节点启动时，即在 <code>config/elasticsearch.yml</code> 中配置 <code>discovery.type: single-node</code>, 后续的节点是起不来的.</p></blockquote><p>后续为了计算机不要太卡，关掉了这个三个节点。</p><h2 id=kibana>Kibana</h2><h3 id=下载>下载</h3><p>输入链接 <a href=https://www.elastic.co/cn/downloads/kibana,>https://www.elastic.co/cn/downloads/kibana,</a> 由于 es 的版本是 7.13.3， 那么这里下载的版本也需要为 7.13.3 版本。</p><h3 id=配置-kibana>配置 kibana</h3><p>解压缩后，打开 config\kibana.yml 文件，修改配置</p><div class=highlight><pre class=chroma><code class=language-yaml data-lang=yaml><span class=c># 配置 es 节点</span><span class=w>
+</span><span class=w></span><span class=nt>elasticsearch.hosts</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=s2>&#34;http://localhost:9200&#34;</span><span class=p>]</span><span class=w>
+</span><span class=w>
+</span><span class=w></span><span class=c># 配置中文</span><span class=w>
+</span><span class=w></span><span class=nt>i18n.locale</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;zh-CN&#34;</span><span class=w>
+</span></code></pre></div><h3 id=启动>启动</h3><p>双击 bin\kibana.bat 文件，等待 cmd 启动， 启动后控制台会显示：</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>log   [10:31:15.260] [info][server][Kibana][http] http server running at http://localhost:5601
+  log   [10:31:16.200] [info][kibana-monitoring][monitoring][monitoring][plugins] Starting monitoring stats collection
+  log   [10:31:16.325] [info][plugins][reporting] Browser executable: E:\tools\kibana-7.13.3-windows-x86_64\x-pack\plugins\reporting\chromium\chrome-win\chrome.exe
+  log   [10:31:19.885] [info][plugins][securitySolution] Dependent plugin setup complete - Starting ManifestTask
+</code></pre></div><p>说明启动完成， 浏览器输入地址：http://localhost:5601，便能查看信息。</p><h2 id=检测>检测</h2><p>安装完 kibana 后，点击左侧菜单栏，找到 Dev Tools，点击后会有 console ，如下图所示
+<img src=/images/post/es/image-20210712110628418.png alt=kibana></p><p>在输入框中输入：</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>get _cat/nodes
+</code></pre></div><p>右侧会显示
+<img src=/images/post/es/image-20210712110737472.png alt=节点显示>
+即表示节点是正常，但会有 #！的提示，看原因是由于你的集群没有设置秘钥。 如果要设置秘钥请自行查看提示上链接。</p><h2 id=logstash>Logstash</h2><h3 id=下载安装-1>下载安装</h3><h2 id=logstash-1>Logstash</h2><h3 id=下载安装-2>下载安装</h3><p>输入网址：https://www.elastic.co/cn/downloads/logstash, 下载 zip 解压缩即可。 用 logstash 导入 cvs 中的数据。</p><ul><li>下载 <a href=https://grouplens.org/datasets/movielens/>MovieLens</a>, 解压缩，目前放在 <code>F:/data-set/ml-25m/</code> 中， 这个可以根据自己位置进行修改</li><li>配置 logstash 的配置文件， LOGSTASH_PATH/config/logstash-movie.conf, 将配置如下</li></ul><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>input {
+  file {
+    path =&gt; [&#34;F:/data-set/ml-25m/movies.csv&#34;]
+    start_position =&gt; &#34;beginning&#34;
+    sincedb_path =&gt; &#34;nul&#34;
+  }
+}
+
+filter {
+  csv {
+    separator =&gt; &#34;,&#34;
+    columns =&gt; [&#34;movieId&#34;, &#34;title&#34;, &#34;genre&#34;]
+  }
+
+  mutate {
+    split =&gt; {&#34;genre&#34; =&gt; &#34;|&#34;}
+    remove_field =&gt; [&#34;path&#34;, &#34;host&#34;, &#34;@timestamp&#34;, &#34;message&#34;]
+  }
+
+  mutate {
+    split =&gt; [&#34;title&#34;, &#34;(&#34;]
+    add_field =&gt; {&#34;title&#34; =&gt; &#34;%{[title][0]}%&#34;}
+    add_field =&gt; {&#34;year&#34; =&gt; &#34;%{[title][1]}%&#34;}
+  }
+
+  mutate {
+    convert =&gt; {
+      &#34;year&#34; =&gt; &#34;integer&#34;
+    }
+
+    strip =&gt; [&#34;title&#34;]
+    remove_field =&gt; [&#34;path&#34;, &#34;host&#34;, &#34;@timestamp&#34;, &#34;message&#34;, &#34;content&#34;]
+  }
+
+}
+
+output {
+  elasticsearch {
+    hosts =&gt; &#34;http://localhost:9200&#34;
+    index =&gt; &#34;movies&#34;
+    document_id =&gt; &#34;%{movieId}&#34;
+    #user =&gt; &#34;elastic&#34;
+    #password =&gt; &#34;changeme&#34;
+  }
+  stdout {}
+}
+</code></pre></div><p>这里需要注意的 movieId, title, genre 这 3 个参数有可能会因为 movies.csv 的版本不一样略有差异，具体是 cvs 中的为准。</p><ul><li>使用命令 <code>bin\benchmark.bat -f .\config\logstash-movie.conf </code>, 当命令终端不再打印数据时，表示已经完成导入。</li></ul><h2 id=cerebro>Cerebro</h2><h3 id=说明>说明</h3><p><code>cerebro</code> 是一款开源的 elasticsearch 网页端管理工具。 github 地址为：<a href=https://github.com/lmenezes/cerebro>https://github.com/lmenezes/cerebro</a></p><h3 id=下载安装-3>下载安装</h3><p>在 <a href=https://github.com/lmenezes/cerebro/releases>Releases</a> 中，下载 zip 文件解压缩即可。</p><h3 id=运行>运行</h3><p>点击 <code>bin\cerebro.bat</code> 文件，启动后打开浏览器，
+<img src=/images/post/es/image-20210712135738461.png alt=启动页面></p><p>输入要监控的 es 节点后，</p><p><img src=/images/post/es/image-20210712175749240.png alt=监控9200></p><p>就有相应的数据显示。</p></div><div class=post-footer><div class=info><span class=separator><a class=tag href=/tags/%E6%90%9C%E7%B4%A2/>搜索</a><a class=tag href=/tags/es/>es</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.83cb1dd5fea8d42d87d1e601a07faa73089ad0ef9ccfe5daf6041289ebcc4e46.js integrity="sha256-g8sd1f6o1C2H0eYBoH+qcwia0O+cz+Xa9gQSievMTkY=" crossorigin=anonymous></script><script async defer src=https://scripts.simpleanalyticscdn.com/latest.js></script><noscript><img src=https://queue.simpleanalyticscdn.com/noscript.gif alt></noscript></body></html>
