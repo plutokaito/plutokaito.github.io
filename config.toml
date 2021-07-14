@@ -1,7 +1,7 @@
 baseURL = "http://plutokaito.github.io"
 languageCode = "en"
 DefaultContentLanguage = "cn"
-title = "KaitoShy's 万事屋"
+title = "临海筱轩"
 theme ="anatole"
 enableEmoji = true
 enableRobotsTXT = true
