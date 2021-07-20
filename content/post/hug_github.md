@@ -114,7 +114,26 @@ $ ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""
 打开网址 https://plutokaito.github.io，访问成功。
 ![成功访问](/images/post/7.png)
 
+## 自定义域名
+### 设置域名解析
+在域名购买商设置好域名解析，主域名用 A 即可，以下是我的设置。
+![域名解析](/images/post/hugo_github/dns.png)
 
+然后因为我要访问的 www.kaitoshy.com 作为我的博客域名地址，因此我又设置 CNAME。
+
+设置好使用 dig 工具，查看：
+```powershell
+>  dig www.kaitoshy.com +nostats +nocomments +nocmd
+;www.kaitoshy.com.              IN      A
+www.kaitoshy.com.       600     IN      CNAME   plutokaito.github.io.
+plutokaito.github.io.   3600    IN      A       185.199.109.153
+plutokaito.github.io.   3600    IN      A       185.199.108.153
+plutokaito.github.io.   3600    IN      A       185.199.111.153
+plutokaito.github.io.   3600    IN      A       185.199.110.153
+```
+
+### 增加 CNAME 文件
+在 static 中增加 CNAME 文件， 编译后 CNAME 就会放到 root 的目录中， 在 root 中的 CNAME 文件会被 gtihub-pages 自动解析到。
 
 
 > 参考资料
@@ -122,3 +141,4 @@ $ ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""
 - [gohu 部署在 github 上](https://gohugo.io/hosting-and-deployment/hosting-on-github/)
 - [gohu 快速入门](https://gohugo.io/getting-started/quick-start/)
 - [anantole 主题](https://github.com/lxndrblz/anatole)
+- [Managing a custom domain for your GitHub Pages site](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
