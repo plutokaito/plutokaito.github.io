@@ -107,7 +107,7 @@ $ ssh-keygen -t rsa -b 4096 -C "$(git config user.email)" -f gh-pages -N ""
 ![新增 secret](/images/post/5.png)
 
 3. 上传代码后，项目会有一个 `gh-pages` 的分支，将 `Setting > Pages` 中的分支更改成 gp-pages。即可。目录为 /(root) 目录。 具体配置如下：
-![配置访问分支](/images/6.png)
+![配置访问分支](/images/post/6.png)
 
 
 ## 验收成果
@@ -134,6 +134,14 @@ plutokaito.github.io.   3600    IN      A       185.199.110.153
 
 ### 增加 CNAME 文件
 在 static 中增加 CNAME 文件， 编译后 CNAME 就会放到 root 的目录中， 在 root 中的 CNAME 文件会被 gtihub-pages 自动解析到。
+
+### 验证自定义域名
+推送到远程仓库后，查看自定义域名，www.kaitoshy.com.访问浏览器，出现以下画面就表示成功了。
+
+
+![成功](/images/post/hugo_github/success.png)
+
+
 
 
 > 参考资料
