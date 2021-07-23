@@ -1,13 +1,13 @@
 ---
-title: "ELK 在开发机上的安装"
+title: "ELK 入门实战（一） - 使用安装 WIN 篇"
 date: 2021-07-13
 tags: ["搜索", "es"]
-description : "该篇文章主要讲述的是 7.13.3 版本 ELK 的 WIN 安装"
+description : "该篇文章主要讲述的是 7.13.3 版本 ELK 的 WIN 安装。"
 ---
 
 ELK 主要的使用场景为日志分析和搜索引擎。
 
-那么接下来讲述的是 `7.13.3` 版本 ELK 在 WINDOWS 机子上的安装和使用。
+那么接下来讲述的是 `7.13.3` 版本 ELK 在 WINDOWS 机子上的安装。当然还有 mac， Linux， 和基于 docker 的安装，这里不做相应的介绍。
 
 ## ElasticSearch 
 ### 下载安装
@@ -104,9 +104,6 @@ get _cat/nodes
 
 
 ## Logstash
-### 下载安装
-## Logstash
-
 ### 下载安装
 
 输入网址：https://www.elastic.co/cn/downloads/logstash,  下载 zip 解压缩即可。 用 logstash 导入 cvs 中的数据。
