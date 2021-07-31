@@ -48,7 +48,7 @@ api 工具
 - [腾讯会议](https://meeting.tencent.com/download-center.html?from=1001) 视频会议的时候用到
 - [Keka压缩包](https://www.keka.io/zh-cn/) 开源的压缩包，满足日常解压缩
 - [deepL 翻译软件](https://www.deepl.com/macos/download/DeepL.dmg) 翻译工具
-
+- magnet : App Store 购买下载，用于桌面窗口的管理。可以一个桌面显示不同 App 的显示，使用起来还是蛮方便的。
 
 ### 4. 输入法
 [搜狗](https://pinyin.sogou.com/mac/)
@@ -63,7 +63,7 @@ ipad 的作为第二屏幕使用，appStore上直接下载。
 - [万年历]()
 appStore 上直接下载
 - [屏幕保护-fliqlo](https://fliqlo.com/download/Fliqlo%201.8.3.dmg)
-Better Menubar: AppStore 上直接下载
+- Better Menubar: AppStore 上直接下载
 - [pep.er](https://paper.meiyuan.in/)
 桌面壁纸工具
 - [Microsoft Remote Desktop Beta](https://install.appcenter.ms/orgs/rdmacios-k2vy/apps/microsoft-remote-desktop-for-mac/distribution_groups/all-users-of-microsoft-remote-desktop-for-mac)
@@ -74,6 +74,6 @@ win 的远程桌面
 [jetbranis font](https://www.jetbrains.com/zh-cn/lp/mono/)
 
 > 当然还有神奇的网站
-[xclient](https://xclient.info/)
-[壁纸](https://wallpaperhub.app/wallpapers)
+> - [xclient](https://xclient.info/)
+> - [壁纸](https://wallpaperhub.app/wallpapers)
 
