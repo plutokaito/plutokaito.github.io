@@ -9,7 +9,7 @@ ELK 主要的使用场景为日志分析和搜索引擎。
 
 那么接下来讲述的是 `7.13.3` 版本 ELK 在 WINDOWS 机子上的安装。当然还有 mac， Linux， 和基于 docker 的安装，这里不做相应的介绍。
 
-## ElasticSearch 
+## ElasticSearch
 ### 下载安装
 从[官网下载](https://www.elastic.co/cn/downloads/elasticsearch)，当前版本为 7.13.3， 下载到自己的合适的位置。解压缩文件，打开文件夹：
 
@@ -164,7 +164,7 @@ output {
 - 使用命令 `bin\benchmark.bat -f .\config\logstash-movie.conf `, 当命令终端不再打印数据时，表示已经完成导入。
 
 
-## Cerebro 
+## Cerebro
 ### 说明
 `cerebro` 是一款开源的 elasticsearch 网页端管理工具。 github 地址为：[https://github.com/lmenezes/cerebro](https://github.com/lmenezes/cerebro)
 
