@@ -1,7 +1,7 @@
 ---
 title: "使用 SpringBoot + Spring JMS + AWS SQS 的 Demo"
-date: 2021-08-20
-tags: ["springboot", "jms", 'aws', '']
+date: 2021-08-19
+tags: ["springboot", "jms", 'aws']
 description : "该篇文章主要是讲述怎么使用 SpringBoot + Spring JMS 在 AWS SQS 收发信息"
 ---
 
