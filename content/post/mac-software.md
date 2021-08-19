@@ -32,8 +32,8 @@ PHP 开发工具
 - [docker ui](https://www.portainer.io/)
 docker
 
-[Sequel-Ace](https://github.com/Sequel-Ace/Sequel-Ace/releases)
-数据库客户端
+[DBeaver](https://dbeaver.io/download/)
+数据库客户端，用 Java 编写，由于自身需要用 Java 进行开发，所以使用了这款。当然了还有款备用的也还不错。[Sequel-Ace](https://github.com/Sequel-Ace/Sequel-Ace/releases)
 
 [postman](https://www.postman.com/downloads/)
 api 工具
