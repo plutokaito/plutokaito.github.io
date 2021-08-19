@@ -1,0 +1,120 @@
+<!doctype html><html dir=ltr lang=cn data-theme=dark><head><title>KaitoShy | 使用 SpringBoot + Spring JMS + AWS SQS 的 Demo</title><meta charset=utf-8><meta name=generator content="Hugo 0.82.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="该篇文章主要是讲述怎么使用 SpringBoot + Spring JMS 在 AWS SQS 收发信息"><meta name=google-site-verification content="L6xe0i6HBiJAWiH5QHEw9sqEVLcBuUl5vn_4ZkCprXw"><link rel=stylesheet href=/css/main.min.69a557b4fc895e1566037155c2b37c752bb8ccf82803bf8551c60ae44f0f4e23.css integrity="sha256-aaVXtPyJXhVmA3FVwrN8dSu4zPgoA7+FUcYK5E8PTiM=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=canonical href=/post/sqs_jms/><script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script><script type=text/javascript src=/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="使用 SpringBoot + Spring JMS + AWS SQS 的 Demo"><meta name=twitter:description content="该篇文章主要是讲述怎么使用 SpringBoot + Spring JMS 在 AWS SQS 收发信息"></head><body><div class="sidebar animated fadeInDown"><div class=logo-title><div class=title><img src=/images/avatar.png alt="profile picture"><h3 title><a href=/>I'm KaitoShy</a></h3><div class=description><p>Java And PHP Developer</p></div></div></div><ul class=social-links><li><a href=https://github.com/plutokaito rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:kaito78@163.com rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; KaitoShy 2021 - 2021</div></div></div><div class=main><div class="page-top animated fadeInDown"><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>主页(Home)</a></li><li><a href=/post/ title>博客(Blog)</a></li><li><a href=/about/ title>关于(About)</a></li><li><a href=/tags/ title>标签(tags)</a></li><li><a href=/contact/ title>联系(Contact)</a></li><li class=theme-switch-item><a class=theme-switch title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post animated fadeInDown"><div class=post-content><div class=post-title><h3>使用 SpringBoot + Spring JMS + AWS SQS 的 Demo</h3><div class=info><em class="fas fa-calendar-day"></em><span class=date>Thu, Aug 19, 2021</span>
+<em class="fas fa-stopwatch"></em><span class=reading-time></span></div></div><p>本篇文章主要是讲述怎么在 springboot 项目利用 Jms 收发 AWS SQS 的消息，具体代码详见：<a href=https://github.com/plutokaito/aws-sqs-demo>aws-sqs-demo</a></p><h2 id=aws-sqs>AWS SQS</h2><h3 id=注册-aws-账号>注册 AWS 账号</h3><p>注册 aws 账号时需要准备一张国际卡信用卡， visa 或者 master 卡都行。因为开通的时候需要从卡里锁定一美元。注册的时候需要填写 5 个步骤，按照<a href=https://portal.aws.amazon.com/billing/signup#/account>官网</a>提示，一步一步往下走，即可，这里不做过多解释。</p><h3 id=创建-sqs>创建 SQS</h3><p>在搜索栏中搜索 SQS ，出现 Simple Queue Service。</p><p><img src=/images/post/sqs/image-20210818140429773.png alt=image-20210818140429773></p><p>进入 Amazon SQS 后， 点击 Create queue 按钮，创建 Standard Queue 即可， 名称等信息按照自己业务的方式填写即可， 我这里就填写了名称其他的都是默认的填写， 便完成了如下图所示</p><p><img src=/images/post/sqs/image-20210818140839499.png alt=image-20210818140839499></p><h3 id=设置-security-credentials>设置 Security Credentials</h3><p>设置 access keys。 点击个人账号后，进入 Your Security Credentials &#187; Access keys (access key ID and secret access key)。创建新的 Access Key。主要保存下载保存自己的 access key。需要注意的是：只有创建时会显示，其他任何时候不能再显示了。</p><p><img src=/images/post/sqs/image-20210818143821731.png alt=image-20210818143821731></p><h2 id=代码-demo>代码 Demo</h2><h3 id=创建-springboot-项目>创建 SpringBoot 项目</h3><p>在 start.spring.io 的网站上创建一个简单的 Springboot 项目。或者使用 idea 创建项目都可以。</p><h3 id=引入包>引入包</h3><p>引入包文件</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>		&lt;dependency&gt;
+			&lt;groupId&gt;com.amazonaws&lt;/groupId&gt;
+			&lt;artifactId&gt;aws-java-sdk&lt;/artifactId&gt;
+			&lt;version&gt;1.11.106&lt;/version&gt;
+		&lt;/dependency&gt;
+
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-jms&lt;/artifactId&gt;
+		&lt;/dependency&gt;
+
+		&lt;!-- 注意： 1.0.8 所包含的包是1.11.106，以免造成包冲突 --&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;com.amazonaws&lt;/groupId&gt;
+			&lt;artifactId&gt;amazon-sqs-java-messaging-lib&lt;/artifactId&gt;
+			&lt;version&gt;1.0.8&lt;/version&gt;
+		&lt;/dependency&gt;
+</code></pre></div><h3 id=配置-config>配置 Config</h3><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Configuration</span>
+<span class=nd>@EnableJms</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>JmsConfig</span> <span class=o>{</span>
+
+    <span class=n>SQSConnectionFactory</span> <span class=n>connectionFactory</span> <span class=o>=</span> <span class=k>new</span> <span class=n>SQSConnectionFactory</span><span class=o>(</span>
+            <span class=k>new</span> <span class=n>ProviderConfiguration</span><span class=o>(),</span>
+            <span class=n>AmazonSQSClientBuilder</span><span class=o>.</span><span class=na>standard</span><span class=o>()</span>
+                    <span class=o>.</span><span class=na>withRegion</span><span class=o>(</span><span class=n>Regions</span><span class=o>.</span><span class=na>US_EAST_2</span><span class=o>)</span>
+                    <span class=o>.</span><span class=na>withCredentials</span><span class=o>(</span><span class=k>new</span> <span class=n>ClasspathPropertiesFileCredentialsProvider</span><span class=o>(</span><span class=s>&#34;sqs.properties&#34;</span><span class=o>))</span>
+    <span class=o>);</span>
+
+    <span class=nd>@Bean</span>
+    <span class=kd>public</span> <span class=n>DefaultJmsListenerContainerFactory</span> <span class=nf>jmsListenerContainerFactory</span><span class=o>()</span> <span class=o>{</span>
+        <span class=n>DefaultJmsListenerContainerFactory</span> <span class=n>factory</span> <span class=o>=</span> <span class=k>new</span> <span class=n>DefaultJmsListenerContainerFactory</span><span class=o>();</span>
+        <span class=n>factory</span><span class=o>.</span><span class=na>setConnectionFactory</span><span class=o>(</span><span class=k>this</span><span class=o>.</span><span class=na>connectionFactory</span><span class=o>);</span>
+        <span class=n>factory</span><span class=o>.</span><span class=na>setDestinationResolver</span><span class=o>(</span><span class=k>new</span> <span class=n>DynamicDestinationResolver</span><span class=o>());</span>
+        <span class=c1>// 3 - 10 listeners
+</span><span class=c1></span>        <span class=n>factory</span><span class=o>.</span><span class=na>setConcurrency</span><span class=o>(</span><span class=s>&#34;3-10&#34;</span><span class=o>);</span>
+        <span class=c1>// when client receive success with none exception will send ack, and service delete this message
+</span><span class=c1></span>        <span class=c1>// otherwise Spring will recover the message.
+</span><span class=c1></span>        <span class=n>factory</span><span class=o>.</span><span class=na>setSessionAcknowledgeMode</span><span class=o>(</span><span class=n>Session</span><span class=o>.</span><span class=na>CLIENT_ACKNOWLEDGE</span><span class=o>);</span>
+        <span class=k>return</span> <span class=n>factory</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=nd>@Bean</span>
+    <span class=kd>public</span> <span class=n>JmsTemplate</span> <span class=nf>defaultJmsTemplate</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=k>new</span> <span class=n>JmsTemplate</span><span class=o>(</span><span class=k>this</span><span class=o>.</span><span class=na>connectionFactory</span><span class=o>);</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></div><p>使用注解 @EnableJms 开启 Jms 的监听，从 sqs.properties 文件中读取之前在网站上配置的 accessKey 和 secretKey。</p><h3 id=消息体>消息体</h3><p>消息体可以理解成一个 dto， 这里我简单以 title, points 为例。</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=kd>public</span> <span class=kd>class</span> <span class=nc>SqsDemoMsg</span> <span class=o>{</span>
+    <span class=kd>private</span> <span class=n>String</span> <span class=n>title</span><span class=o>;</span>
+    <span class=kd>private</span> <span class=n>Long</span> <span class=n>points</span><span class=o>;</span>
+
+    <span class=kd>public</span> <span class=n>String</span> <span class=nf>getTitle</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=n>title</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setTitle</span><span class=o>(</span><span class=n>String</span> <span class=n>title</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>this</span><span class=o>.</span><span class=na>title</span> <span class=o>=</span> <span class=n>title</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=n>Long</span> <span class=nf>getPoints</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=n>points</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setPoints</span><span class=o>(</span><span class=n>Long</span> <span class=n>points</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>this</span><span class=o>.</span><span class=na>points</span> <span class=o>=</span> <span class=n>points</span><span class=o>;</span>
+    <span class=o>}</span>
+
+
+    <span class=nd>@Override</span>
+    <span class=kd>public</span> <span class=n>String</span> <span class=nf>toString</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=s>&#34;SqsDemoMsg{&#34;</span> <span class=o>+</span>
+                <span class=s>&#34;title=&#39;&#34;</span> <span class=o>+</span> <span class=n>title</span> <span class=o>+</span> <span class=sc>&#39;\&#39;&#39;</span> <span class=o>+</span>
+                <span class=s>&#34;, points=&#34;</span> <span class=o>+</span> <span class=n>points</span> <span class=o>+</span>
+                <span class=sc>&#39;}&#39;</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=kd>static</span> <span class=n>SqsDemoMsg</span> <span class=nf>jsonToSqsDemoMsg</span><span class=o>(</span><span class=n>String</span> <span class=n>jsonString</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>try</span> <span class=o>{</span>
+            <span class=k>return</span> <span class=n>JSONObject</span><span class=o>.</span><span class=na>parseObject</span><span class=o>(</span><span class=n>jsonString</span><span class=o>,</span> <span class=n>SqsDemoMsg</span><span class=o>.</span><span class=na>class</span><span class=o>);</span>
+        <span class=o>}</span> <span class=k>catch</span> <span class=o>(</span><span class=n>JSONException</span> <span class=n>e</span><span class=o>)</span> <span class=o>{</span>
+            <span class=k>return</span> <span class=kc>null</span><span class=o>;</span>
+        <span class=o>}</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></div><h3 id=发送端>发送端</h3><p>发端的端将 SqsDemoMsg 的信息，使用 fastjson 将数据压缩成 json 字符串进行传输。</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Service</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>SendServiceImpl</span> <span class=kd>implements</span> <span class=n>SendService</span> <span class=o>{</span>
+    <span class=nd>@Autowired</span>
+    <span class=kd>private</span> <span class=n>JmsTemplate</span> <span class=n>jmsTemplate</span><span class=o>;</span>
+
+    <span class=nd>@Value</span><span class=o>(</span><span class=s>&#34;${test.queue}&#34;</span><span class=o>)</span>
+    <span class=kd>private</span> <span class=n>String</span> <span class=n>queueName</span><span class=o>;</span>
+
+    <span class=nd>@Override</span>
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>sendMessage</span><span class=o>(</span><span class=n>Long</span> <span class=n>points</span><span class=o>,</span> <span class=n>String</span> <span class=n>title</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>IOException</span> <span class=o>{</span>
+        <span class=n>SqsDemoMsg</span> <span class=n>msg</span> <span class=o>=</span> <span class=k>new</span> <span class=n>SqsDemoMsg</span><span class=o>();</span>
+        <span class=n>msg</span><span class=o>.</span><span class=na>setPoints</span><span class=o>(</span><span class=n>points</span><span class=o>);</span>
+        <span class=n>msg</span><span class=o>.</span><span class=na>setTitle</span><span class=o>(</span><span class=n>title</span><span class=o>);</span>
+        <span class=c1>// send message
+</span><span class=c1></span>        <span class=n>jmsTemplate</span><span class=o>.</span><span class=na>convertAndSend</span><span class=o>(</span><span class=n>queueName</span><span class=o>,</span> <span class=n>JSONObject</span><span class=o>.</span><span class=na>toJSONString</span><span class=o>(</span><span class=n>msg</span><span class=o>));</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></div><h3 id=接收端>接收端</h3><p>接受端主要是接受发送端的数据，并将数据打印。</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Service</span>
+<span class=nd>@Slf4j</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>ReceiveServiceImpl</span> <span class=kd>implements</span> <span class=n>ReceiveService</span> <span class=o>{</span>
+
+    <span class=nd>@JmsListener</span><span class=o>(</span><span class=n>destination</span> <span class=o>=</span> <span class=s>&#34;${test.queue}&#34;</span><span class=o>)</span>
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>message</span><span class=o>(</span><span class=n>String</span> <span class=n>jsonString</span><span class=o>)</span> <span class=o>{</span>
+        <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;===&gt; received message:{}&#34;</span><span class=o>,</span> <span class=n>jsonString</span><span class=o>);</span>
+        <span class=n>SqsDemoMsg</span> <span class=n>sqsDemoMsg</span> <span class=o>=</span> <span class=n>SqsDemoMsg</span><span class=o>.</span><span class=na>jsonToSqsDemoMsg</span><span class=o>(</span><span class=n>jsonString</span><span class=o>);</span>
+
+        <span class=n>log</span><span class=o>.</span><span class=na>info</span><span class=o>(</span><span class=s>&#34;===&gt; points:{} &#34;</span><span class=o>,</span> <span class=n>sqsDemoMsg</span><span class=o>.</span><span class=na>getPoints</span><span class=o>());</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></div><p>@JmsListener 的注解会创建一个 JSM 的监听者。当接收到消息的时候，这个方法就会打印数据。</p><p>到这里大部分的主要代码已经 ok了， 为了方便测试我又新建了一个 Controller， 用来不同验证不同的 title 和 points 的情况。</p><h2 id=启动验证>启动验证</h2><p>在文件 <code>sqs.properties</code> 上配置 <code>aws Access keys</code>, 这里是之前设置的 access key ID 和 secret access key ：</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>accessKey=XXX
+secretKey=XXX
+</code></pre></div><p>在文件 <code>application.properties</code> 中配置 queue 的名称</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>test.queue = MyQueue_test
+</code></pre></div><p>配置完成后，启动项目，在浏览器中输入链接 <code>http://localhost:8080/send/demo?points=111&title=kaito</code> , title 是参数， points 也是链接。 查看日志信息:</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>2021-08-18 14:10:10.291  INFO 9608 --- [ntContainer#0-2] i.k.s.service.impl.ReceiveServiceImpl    : ===&gt; received message:{&#34;points&#34;:111,&#34;title&#34;:&#34;kaito&#34;}
+2021-08-18 14:10:10.332  INFO 9608 --- [ntContainer#0-2] i.k.s.service.impl.ReceiveServiceImpl    : ===&gt; points:111
+
+</code></pre></div><p>能接收到信息，并进行了打印处理。</p><p>在 aws 客户端的 monitoring 中能看到相应的统计信息了。</p><h2 id=参考链接>参考链接</h2><p><a href=https://aws.amazon.com/cn/blogs/developer/using-amazon-sqs-with-spring-boot-and-spring-jms/>Using Amazon SQS with Spring Boot and Spring JMS</a></p></div><div class=post-footer><div class=info><span class=separator><a class=tag href=/tags/springboot/>springboot</a><a class=tag href=/tags/jms/>jms</a><a class=tag href=/tags/aws/>aws</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.83cb1dd5fea8d42d87d1e601a07faa73089ad0ef9ccfe5daf6041289ebcc4e46.js integrity="sha256-g8sd1f6o1C2H0eYBoH+qcwia0O+cz+Xa9gQSievMTkY=" crossorigin=anonymous></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2224MZXW3"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-Z2224MZXW3')</script><script async defer src=https://scripts.simpleanalyticscdn.com/latest.js></script><noscript><img src=https://queue.simpleanalyticscdn.com/noscript.gif alt></noscript></body></html>
