@@ -141,7 +141,8 @@ plutokaito.github.io.   3600    IN      A       185.199.110.153
 
 ![成功](/images/post/hugo_github/success.png)
 
-
+## favicon.ico
+利用网站 [figma](https://www.figma.com/) 手绘了一个符合网站个性的图片，生成后利用 png 转 ico 的工具转成后缀为 ico 的格式的文件，放在 static 下。 重启后便能在浏览器上的标签页上看到相应的图片了。
 
 
 > 参考资料

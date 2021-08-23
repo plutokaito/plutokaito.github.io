@@ -16,7 +16,7 @@ description : "该篇文章主要记录自己在 mac 上常用的软件"
 Java 开发工具，能满足日常开发。
 
 [vscode](https://code.visualstudio.com/)
-PHP 开发工具
+一款不错的编辑器，我目前用来开发 PHP 和一些常用的脚本编辑
 
 [iterm2](https://iterm2.com/)
 命令行终端
