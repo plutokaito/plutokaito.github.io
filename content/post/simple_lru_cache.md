@@ -1,7 +1,7 @@
 ---
-title: "利用 HashMap 和链表实现 LRU_CACHE"
+title: "缓存 (番外)- 利用 HashMap 和链表实现 LRU_CACHE"
 date: 2021-08-24
-tags: ["redis", "算法"]
+tags: ["缓存", "算法"]
 description : "该篇文章主要是讲述了怎么利用 HashMap 和链表实现 LRU_CACHE"
 ---
 
