@@ -31,14 +31,16 @@ used_memory_peak_human:8.83G
 maxmemory_human:13.07G
 maxmemory_policy:volatile-lru
 mem_fragmentation_ratio:1.13
+mem_allocator:jemalloc-4.0.3
 ```
-这里摘了几个比较重要的参数：
+这里摘了几个参数：
 - `used_memory_human` : 用户可读的 Redis 已经使用的内存
 - `used_memory_rss_human` : 用户可读的 Redis 向操作系统申请的内存
 - `used_memory_peak_human` : 用户可读的 Redis 使用峰值
 - `maxmemory_human` : 用户可读的 Redis 的设置的最大内存
 - `maxmemory_policy` : 当用户达到最大的内存时，使用的数据的淘汰策略是什么。 这里使用的 在设置了过期时间的键空间中，优先移除最近没有使用的 key。 如果该键没有设置过期时间则该键永远不过期。这里在后续的内容中会讲述。
-- `mem_fragmentation_ratio` : 内存碎片率。 该值在 `1 ~ 1.5` 之间是正常的。`<1` 表示没有足够的物理内存可以使用了，会导致 Redis 的一部分数据会进入 Swap 区进行置换， 之后 Redis 访问 Swap 区的中的数据时，延迟会变大，性能下降。`>1.5` 时，说明内存碎片超过了 50%， 就需要采取一些措施来降低内存碎片了。
+- `mem_fragmentation_ratio` : 内存碎片率。 计算公式为：`used_memory_rss / used_memory`,该值在 `1 ~ 1.5` 之间是正常的。`<1` 表示没有足够的物理内存可以使用了，会导致 Redis 的一部分数据会进入 Swap 区进行置换， 之后 Redis 访问 Swap 区的中的数据时，延迟会变大，性能下降。`>1.5` 时，说明内存碎片超过了 50%， 就需要采取一些措施来降低内存碎片了。
+- `mem_allocator` : 在编译时期指定 Redis 的内存分配器，可以是：libc， jemalloc(默认，Facebook 推出的)， tcmalloc(Google 开发的，golang 的内存管理也是基于这个)
 
 由此，我推断是程序中是否有缓存没有设置过期时间导致了使用的内存越来越大？
 
