@@ -1,9 +1,11 @@
 ---
 title: "FastJson 调用 toString 时 null 字段不显示"
-date: 2021-01-26
+date: 2022-01-26
 tags: ["源码分析", "fastjson"]
 description : "FastJson 调用 toString 时 null 字段不显示"
 ---
+该篇文章主要分析了 fastjson 在没有配置策略时，序列化输出是不会显示值为 null 的字段。
+
 ## 前提
 1. 创建 maven 项目
 2. 引入 fastjson , [github 地址](https://github.com/alibaba/fastjson)
