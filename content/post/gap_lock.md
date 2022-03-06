@@ -56,7 +56,7 @@ Record lock, heap no 4 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
 | 共享锁 | 冲突 | 冲突 | 兼容 | 兼容 |
 | 意向共享锁 | 冲突 | 兼容 | 兼容 | 兼容 |
 
-通过整个表，可以我们可以知道，由于 duplicate key 错误会产生一个共享锁, 这时候由于事务还未提交，所以 Session A 一直持有共享锁，而当 Session B 使用 SQL 时持有了排它锁，导致了锁冲突，发生了死锁。
+通过这个表，我们可以知道，由于 duplicate key 错误会产生一个共享锁, 这时候由于事务还未提交，所以 Session A 一直持有共享锁，而当 Session B 使用 SQL 时持有了排它锁，导致了锁冲突，发生了死锁。
 至此我们分析完了这次的原因。
 
 ## 优化方案
