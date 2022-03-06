@@ -22,7 +22,7 @@ doNotLoadAnimations = false
 readMore = true
 ## displayMode = "dark"
 copyright = "临海筱轩 2021 - {{ YEAR }}"
-contentratio = 0.7
+contentratio = 0.618
 googleSiteVerify = "L6xe0i6HBiJAWiH5QHEw9sqEVLcBuUl5vn_4ZkCprXw"
 gtagId = "G-Z2224MZXW3"
 
