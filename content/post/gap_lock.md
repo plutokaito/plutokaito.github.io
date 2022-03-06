@@ -6,7 +6,7 @@ description : "该文章主要是介绍了 MySQL 中间隙锁"
 ---
 该篇文章主要是从一次死锁现象到分析到原因的记录。
 ## 现象描述
-当一个事务中，当插入了出现了 `Duplicate key Error` 时，但没有提交当前事务；另一个事务使用 `SELECT * FROM table FOR UPDATE` 语句时，会发生等待执行，等待时间后出现错误 `ERROR 1205 (HY000):Lock wait timeout exceeded;`。为什么会出现这种现象呢？
+当一个事务中，当插入时出现了 `Duplicate key Error` ，但没有提交当前事务；另一个事务使用 `SELECT * FROM table FOR UPDATE` 语句时，会发生等待执行，等待一定时间后出现错误 `ERROR 1205 (HY000):Lock wait timeout exceeded;`。为什么会出现这种现象呢？
 
 
 ## 现象复现
@@ -15,7 +15,7 @@ description : "该文章主要是介绍了 MySQL 中间隙锁"
 
 输入以下建表语句
 ```SQL
-REATE TABLE `user_test` (
+CREATE TABLE `user_test` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -56,7 +56,7 @@ Record lock, heap no 4 PHYSICAL RECORD: n_fields 2; compact format; info bits 0
 | 共享锁 | 冲突 | 冲突 | 兼容 | 兼容 |
 | 意向共享锁 | 冲突 | 兼容 | 兼容 | 兼容 |
 
-通过这个表，我们可以知道，由于 duplicate key 错误会产生一个共享锁, 这时候由于事务还未提交，所以 Session A 一直持有共享锁，而当 Session B 使用 SQL 时持有了排它锁，导致了锁冲突，发生了死锁。
+通过这个表，我们可以知道，由于 duplicate key 错误会产生一个共享锁, 这时候由于事务还未提交，所以 Session A 一直持有共享锁，而当 Session B 使用 SQL 时持有了排它锁，导致了锁冲突，发生了死锁。经过一定的参数为 ``innodb_lock_wait_timeout` 默认 50s， 最小 1s。
 至此我们分析完了这次的原因。
 
 ## 优化方案
