@@ -12,7 +12,7 @@ pygmentsCodefencesGuessSyntax = true
 
 [params]
 title="I'm KaitoShy"
-author="临海筱轩"
+author="江临筱轩"
 description = "Java And PHP Developer"
 keywords="java php"
 fullPostContent = false
@@ -21,7 +21,7 @@ profilePicture = "images/avatar.png"
 doNotLoadAnimations = false
 readMore = true
 ## displayMode = "dark"
-copyright = "临海筱轩 2021 - {{ YEAR }}"
+copyright = "降临筱轩 2021 - {{ YEAR }}"
 contentratio = 0.7
 googleSiteVerify = "L6xe0i6HBiJAWiH5QHEw9sqEVLcBuUl5vn_4ZkCprXw"
 gtagId = "G-Z2224MZXW3"
