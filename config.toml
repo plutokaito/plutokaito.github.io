@@ -13,8 +13,8 @@ pygmentsCodefencesGuessSyntax = true
 [params]
 title="I'm KaitoShy"
 author="江临筱轩"
-description = "Java And PHP Developer"
-keywords="java php"
+description = "Java Developer"
+keywords="Java"
 fullPostContent = false
 mainSections = ["post"]
 profilePicture = "images/avatar.png"
