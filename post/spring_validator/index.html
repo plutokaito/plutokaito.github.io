@@ -1,0 +1,128 @@
+<!doctype html><html dir=ltr lang=cn data-theme><head><title>江临筱轩 | SpringBoot 中如何使用 Validator 检测含有泛型的对象</title><meta charset=utf-8><meta name=generator content="Hugo 0.82.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="SpringBoot 中如何使用 Validator 检测含有泛型的对象"><meta name=google-site-verification content="L6xe0i6HBiJAWiH5QHEw9sqEVLcBuUl5vn_4ZkCprXw"><link rel=stylesheet href=/css/main.min.69a557b4fc895e1566037155c2b37c752bb8ccf82803bf8551c60ae44f0f4e23.css integrity="sha256-aaVXtPyJXhVmA3FVwrN8dSu4zPgoA7+FUcYK5E8PTiM=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=canonical href=/post/spring_validator/><script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script><script type=text/javascript src=/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="SpringBoot 中如何使用 Validator 检测含有泛型的对象"><meta name=twitter:description content="SpringBoot 中如何使用 Validator 检测含有泛型的对象"></head><body><div class="sidebar animated fadeInDown"><div class=logo-title><div class=title><img src=/images/avatar.png alt="profile picture"><h3 title><a href=/>I'm KaitoShy</a></h3><div class=description><p>Java Developer</p></div></div></div><ul class=social-links><li><a href=https://github.com/plutokaito rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:kaito78@163.com rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; 江临筱轩 2021 - 2022</div></div></div><div class=main><div class="page-top animated fadeInDown"><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>主页(Home)</a></li><li><a href=/post/ title>博客(Blog)</a></li><li><a href=/about/ title>关于(About)</a></li><li><a href=/tags/ title>标签(tags)</a></li><li><a href=/contact/ title>联系(Contact)</a></li><li class=theme-switch-item><a class=theme-switch title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post animated fadeInDown"><div class=post-content><div class=post-title><h3>SpringBoot 中如何使用 Validator 检测含有泛型的对象</h3><div class=info><em class="fas fa-calendar-day"></em><span class=date>Sat, Mar 19, 2022</span>
+<em class="fas fa-stopwatch"></em><span class=reading-time></span></div></div><p>该文章主要是讲述了 SpringBoot 中如何使用 Validator 检测含有泛型的对象</p><h2 id=版本对应关系>版本对应关系</h2><p>SpringBoot : 2.6.4， 需要 Java 11 版本</p><p>自带 Hibernate Validator: 6.2.2.Final； 最新版本是 7.0.4.Final， 由于 7.0 版本以上依赖的是 Jakarta Bean Validation 3.0。而是 6.0 版本依赖的是 <code>jakarta.validation:jakarta.validation-api:2.0.2</code>, 而 Spring 注册的 <code>LocalValidatorFactoryBean</code> 在运行时也与 Bean Validation 2.0 和 Hibernate Validator 6.0 兼容。</p><p>代码前提：</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=c1>// ApiRequest.java
+</span><span class=c1></span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>ApiRequest</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=o>{</span>
+    <span class=kd>private</span> <span class=n>Long</span> <span class=n>sid</span><span class=o>;</span>
+
+    <span class=kd>private</span> <span class=n>T</span> <span class=n>request</span><span class=o>;</span>
+
+    <span class=kd>public</span> <span class=n>T</span> <span class=nf>getRequest</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=n>request</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setRequest</span><span class=o>(</span><span class=n>T</span> <span class=n>request</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>this</span><span class=o>.</span><span class=na>request</span> <span class=o>=</span> <span class=n>request</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=n>Long</span> <span class=nf>getSid</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=n>sid</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setSid</span><span class=o>(</span><span class=n>Long</span> <span class=n>sid</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>this</span><span class=o>.</span><span class=na>sid</span> <span class=o>=</span> <span class=n>sid</span><span class=o>;</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+
+
+<span class=c1>// HelloTest.java
+</span><span class=c1></span><span class=nd>@RestController</span>
+<span class=nd>@Validated</span>
+<span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;/&#34;</span><span class=o>)</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>HelloTest</span> <span class=o>{</span>
+
+    <span class=nd>@RequestMapping</span><span class=o>(</span><span class=s>&#34;hello&#34;</span><span class=o>)</span>
+    <span class=kd>public</span> <span class=n>String</span> <span class=nf>sayHello</span><span class=o>(</span><span class=nd>@RequestBody</span> <span class=n>ApiRequest</span><span class=o>&lt;</span><span class=nd>@Valid</span> <span class=nd>@NotNull</span> <span class=n>User</span><span class=o>&gt;</span> <span class=n>apiRequest</span><span class=o>)</span> <span class=o>{</span>
+    <span class=c1>// 说明：@Valid 是要透传到 User 里面，为了检测这个类也是需要非空的，那么需要注解，防止传入 &#34;{}&#34;
+</span><span class=c1></span>        <span class=k>return</span> <span class=s>&#34;Hello&#34;</span> <span class=o>+</span> <span class=n>apiRequest</span><span class=o>.</span><span class=na>getRequest</span><span class=o>();</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+
+<span class=c1>// User.java
+</span><span class=c1></span><span class=kd>public</span> <span class=kd>class</span> <span class=nc>User</span> <span class=o>{</span>
+
+    <span class=nd>@NotBlank</span>
+    <span class=nd>@Size</span><span class=o>(</span><span class=n>min</span> <span class=o>=</span> <span class=n>1</span><span class=o>)</span>
+    <span class=kd>private</span> <span class=n>String</span> <span class=n>name</span><span class=o>;</span>
+
+    <span class=nd>@NotBlank</span>
+    <span class=nd>@Min</span><span class=o>(</span><span class=n>10</span><span class=o>)</span>
+    <span class=kd>private</span> <span class=n>Integer</span> <span class=n>age</span><span class=o>;</span>
+
+    <span class=kd>public</span> <span class=n>String</span> <span class=nf>getName</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=n>name</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setName</span><span class=o>(</span><span class=n>String</span> <span class=n>name</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>this</span><span class=o>.</span><span class=na>name</span> <span class=o>=</span> <span class=n>name</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=n>Integer</span> <span class=nf>getAge</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=n>age</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>setAge</span><span class=o>(</span><span class=n>Integer</span> <span class=n>age</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>this</span><span class=o>.</span><span class=na>age</span> <span class=o>=</span> <span class=n>age</span><span class=o>;</span>
+    <span class=o>}</span>
+
+    <span class=nd>@Override</span>
+    <span class=kd>public</span> <span class=n>String</span> <span class=nf>toString</span><span class=o>()</span> <span class=o>{</span>
+        <span class=k>return</span> <span class=s>&#34;User{&#34;</span> <span class=o>+</span>
+                <span class=s>&#34;name=&#39;&#34;</span> <span class=o>+</span> <span class=n>name</span> <span class=o>+</span> <span class=sc>&#39;\&#39;&#39;</span> <span class=o>+</span>
+                <span class=s>&#34;, age=&#34;</span> <span class=o>+</span> <span class=n>age</span> <span class=o>+</span>
+                <span class=sc>&#39;}&#39;</span><span class=o>;</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></div><h2 id=使用>使用</h2><h3 id=实现-valueextractor>实现 ValueExtractor</h3><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=c1>// ApiRequestValueExtraction.java -- 实现了 ValueExtractor
+</span><span class=c1></span><span class=kd>public</span> <span class=kd>class</span> <span class=nc>ApiRequestValueExtraction</span> <span class=kd>implements</span> <span class=n>ValueExtractor</span><span class=o>&lt;</span><span class=n>ApiRequest</span><span class=o>&lt;</span><span class=nd>@ExtractedValue</span> <span class=o>?&gt;&gt;</span> <span class=o>{</span>
+    <span class=nd>@Override</span>
+    <span class=kd>public</span> <span class=kt>void</span> <span class=nf>extractValues</span><span class=o>(</span><span class=n>ApiRequest</span><span class=o>&lt;?&gt;</span> <span class=n>apiRequest</span><span class=o>,</span> <span class=n>ValueReceiver</span> <span class=n>valueReceiver</span><span class=o>)</span> <span class=o>{</span>
+        <span class=n>valueReceiver</span><span class=o>.</span><span class=na>value</span><span class=o>(</span><span class=kc>null</span><span class=o>,</span> <span class=n>apiRequest</span><span class=o>.</span><span class=na>getRequest</span><span class=o>());</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></div><h3 id=注入>注入</h3><h4 id=使用-spi-的方式注入>使用 SPI 的方式注入</h4><ul><li>使用注解 <code>@ExtractedValue</code> 和在 <code>resource</code> 目录中新增文件 <code>META-INF/services/jakarta.validation.valueextraction.ValueExtractor</code>，使用 Java SPI 的方式进行加载, 文件内容如下:</li></ul><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>com.kaitoshy.validator.config.ApiRequestValueExtraction
+</code></pre></div><p>这个填入的就是之前 ValueExtraction 的实现类。</p><p>接下来使用 curl 或者 Postman 进行请求连接测试， 以下是 curl 的命令：</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell>curl --location --request POST <span class=s1>&#39;localhost:8080/hello&#39;</span> <span class=se>\
+</span><span class=se></span>
+--header <span class=s1>&#39;Content-Type: application/json&#39;</span> <span class=se>\
+</span><span class=se></span>
+--data-raw <span class=s1>&#39;{
+</span><span class=s1>
+</span><span class=s1>}&#39;</span>
+
+</code></pre></div><p>返回显示为:</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>{
+
+&#34;timestamp&#34;: &#34;2022-03-19T15:14:36.861+00:00&#34;,
+
+&#34;status&#34;: 500,
+
+&#34;error&#34;: &#34;Internal Server Error&#34;,
+
+&#34;path&#34;: &#34;/hello&#34;
+
+}
+</code></pre></div><p>这时查看终端发现</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>javax.validation.ConstraintViolationException: sayHello.apiRequest: 不能为null
+</code></pre></div><p>这里只是 <code>@NotNull User</code> 这里起了作用，并非 User 内部起作用了，所以将输入改成:</p><div class=highlight><pre class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+
+<span class=nt>&#34;request&#34;</span><span class=p>:</span> <span class=p>{}</span>
+
+<span class=p>}</span>
+</code></pre></div><p>这时 curl 返回和之前一样，但查看终端时查看报错信息，则变成了</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>sayHello.apiRequest.age: 不能为null, sayHello.apiRequest.name: 不能为空
+</code></pre></div><p>说明这个时候的 Validator 已经起作用了。继续将输输入修改成</p><div class=highlight><pre class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+    <span class=nt>&#34;request&#34;</span><span class=p>:</span> <span class=p>{</span>
+        <span class=nt>&#34;age&#34;</span><span class=p>:</span><span class=mi>17</span><span class=p>,</span>
+        <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;kuroba kaito&#34;</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><p>返回为:</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>HelloUser{name=&#39;kuroba kaito&#39;, age=17}
+</code></pre></div><p>说明验证通过了。</p><h4 id=使用-localvalidatorfactorybean-注入>使用 LocalValidatorFactoryBean 注入</h4><p>Spring 官方文档上有这么一句话：</p><blockquote><p>By default, if Bean Validation is present on the classpath (for example, Hibernate Validator), the LocalValidatorFactoryBean is registered as a global Validator for use with @Valid and Validated on controller method arguments.</p></blockquote><p>简单翻译一下就是：如果 Bean Validation 在 classpath 中存在，例如使用了 Hibernate Validator，那么会默认注册一个全局的名为 <code>LocalValidatorFactoryBean</code> 的全局 Validator 用于在 Controller 方法和参数的检验。增加以下代码：</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=nd>@Component</span>
+<span class=nd>@Primary</span>
+<span class=kd>public</span> <span class=kd>class</span> <span class=nc>ApiRequestValidatorBean</span> <span class=kd>extends</span> <span class=n>LocalValidatorFactoryBean</span> <span class=o>{</span>
+    <span class=nd>@Override</span>
+    <span class=kd>protected</span> <span class=kt>void</span> <span class=nf>postProcessConfiguration</span><span class=o>(</span><span class=n>Configuration</span><span class=o>&lt;?&gt;</span> <span class=n>configuration</span><span class=o>)</span> <span class=o>{</span>
+        <span class=n>configuration</span><span class=o>.</span><span class=na>addValueExtractor</span><span class=o>(</span><span class=k>new</span> <span class=n>ApiRequestValueExtraction</span><span class=o>());</span>
+        <span class=kd>super</span><span class=o>.</span><span class=na>postProcessConfiguration</span><span class=o>(</span><span class=n>configuration</span><span class=o>);</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></div><p>用于注册 LocalValidatorFactoryBean 。
+使用以上的测试命令得出和上述一样的结构，这里就不展开描述了。</p><h2 id=总结>总结</h2><p>这里讲述了如何使用 Hibernate Validator 检测带有泛型的 DTO 的数据的合法性。首先需要实现 <code>ValueExtractor</code> 类中的 <code>extractValues</code> 方法，其次将该实例注入到 Spring 的容器中，这里是介绍了两种方式，Hibernate 官网介绍了 4 种。</p><p>本文章介绍了使用 Hibernate 提供的 SPI 方式，即新建文件 <code>resource/META-INF/services/jakarta.validation.valueextraction.ValueExtractor</code> , 然后将实现类写入即可，每行表示一个。
+还有种方式就是使用 <code>LocalValidatorFactoryBean</code> 的方式注入。</p><blockquote><p>参考资料</p><p>spring 官方地址 ：
+<a href=https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#validation-beanvalidation-spring>https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#validation-beanvalidation-spring</a></p><p><a href=https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-config-validation>https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-config-validation</a></p><p><a href=https://github.com/spring-projects/spring-framework/commit/6890e65d2cd98ad89e08e2afbbb1213241a791ac>https://github.com/spring-projects/spring-framework/commit/6890e65d2cd98ad89e08e2afbbb1213241a791ac</a></p><p>Hibernate 官方地址： <a href=https://docs.jboss.org/hibernate/validator/6.2/reference/en-US/html_single/#validator-gettingstarted>https://docs.jboss.org/hibernate/validator/6.2/reference/en-US/html_single/#validator-gettingstarted</a></p></blockquote></div><div class=post-footer><div class=info><span class=separator><a class=tag href=/tags/spring/>spring</a><a class=tag href=/tags/validator/>validator</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.83cb1dd5fea8d42d87d1e601a07faa73089ad0ef9ccfe5daf6041289ebcc4e46.js integrity="sha256-g8sd1f6o1C2H0eYBoH+qcwia0O+cz+Xa9gQSievMTkY=" crossorigin=anonymous></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2224MZXW3"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-Z2224MZXW3')</script><script async defer src=https://scripts.simpleanalyticscdn.com/latest.js></script><noscript><img src=https://queue.simpleanalyticscdn.com/noscript.gif alt></noscript></body></html>
