@@ -13,7 +13,7 @@ description : "该文章主要是介绍了 MySQL 中间隙锁"
 背景条件: MySQL 5.7.31; 存储引擎：InnoDB; 隔离级别：可重复读。
 连上数据库后，通过 `select verion();` 查看当前版本；可以通过命令 `select @@tx_isolation;` 查看当前会话的事务隔离级别。可以通过命令 `show variables like "auto%";` 查看属性 `autocommit` 是否为自动提交。
 
-输入以下建表语句
+输入以下建表语句
 ```SQL
 CREATE TABLE `user_test` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
