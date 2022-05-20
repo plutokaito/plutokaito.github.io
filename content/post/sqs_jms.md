@@ -44,7 +44,7 @@ description : "该篇文章主要是讲述怎么使用 SpringBoot + Spring JMS �
 
 引入包文件
 
-```pom
+```xml
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk</artifactId>
