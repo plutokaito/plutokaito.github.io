@@ -1,0 +1,116 @@
+<!doctype html><html dir=ltr lang=cn data-theme><head><title>江临筱轩 | 几种使用 Java 操作 Zip 包的方法</title><meta charset=utf-8><meta name=generator content="Hugo 0.82.0"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name=description content="该篇文章主要是讲述几种 Zip 包的方法和怎么使用 Java Jdk 操作 Zip 包的。"><meta name=google-site-verification content="L6xe0i6HBiJAWiH5QHEw9sqEVLcBuUl5vn_4ZkCprXw"><link rel=stylesheet href=/css/main.min.69a557b4fc895e1566037155c2b37c752bb8ccf82803bf8551c60ae44f0f4e23.css integrity="sha256-aaVXtPyJXhVmA3FVwrN8dSu4zPgoA7+FUcYK5E8PTiM=" crossorigin=anonymous type=text/css><link rel=stylesheet href=/css/markupHighlight.min.f798cbda9aaa38f89eb38be6414bd082cfd71a6780375cbf67b6d2fb2b96491e.css integrity="sha256-95jL2pqqOPies4vmQUvQgs/XGmeAN1y/Z7bS+yuWSR4=" crossorigin=anonymous type=text/css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin=anonymous><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=canonical href=/post/zip_util/><script type=text/javascript src=/js/anatole-header.min.0c05c0a90d28c968a1cad4fb31abd0b8e1264e788ccefed022ae1d3b6f627514.js integrity="sha256-DAXAqQ0oyWihytT7MavQuOEmTniMzv7QIq4dO29idRQ=" crossorigin=anonymous></script><script type=text/javascript src=/js/anatole-theme-switcher.min.7fd87181cdd7e8413aa64b6867bb32f3a8dc242e684fc7d5bbb9f600dbc2b6eb.js integrity="sha256-f9hxgc3X6EE6pktoZ7sy86jcJC5oT8fVu7n2ANvCtus=" crossorigin=anonymous></script><meta name=twitter:card content="summary"><meta name=twitter:title content="几种使用 Java 操作 Zip 包的方法"><meta name=twitter:description content="该篇文章主要是讲述几种 Zip 包的方法和怎么使用 Java Jdk 操作 Zip 包的。"></head><body><div class="sidebar animated fadeInDown"><div class=logo-title><div class=title><img src=/images/avatar.png alt="profile picture"><h3 title><a href=/>I'm KaitoShy</a></h3><div class=description><p>Java Developer</p></div></div></div><ul class=social-links><li><a href=https://github.com/plutokaito rel=me aria-label=GitHub><i class="fab fa-github fa-2x" aria-hidden=true></i></a></li><li><a href=mailto:kaito78@163.com rel=me aria-label=e-mail><i class="fas fa-envelope fa-2x" aria-hidden=true></i></a></li></ul><div class=footer><div class=by_farbox>&copy; 江临筱轩 2021 - 2022</div></div></div><div class=main><div class="page-top animated fadeInDown"><a role=button class=navbar-burger data-target=navMenu aria-label=menu aria-expanded=false><span aria-hidden=true></span><span aria-hidden=true></span><span aria-hidden=true></span></a><ul class=nav id=navMenu><li><a href=/ title>主页(Home)</a></li><li><a href=/post/ title>博客(Blog)</a></li><li><a href=/about/ title>关于(About)</a></li><li><a href=/tags/ title>标签(tags)</a></li><li><a href=/contact/ title>联系(Contact)</a></li><li class=theme-switch-item><a class=theme-switch title="Switch Theme"><i class="fas fa-adjust fa-fw" aria-hidden=true></i></a></li></ul></div><div class=autopagerize_page_element><div class=content><div class="post animated fadeInDown"><div class=post-content><div class=post-title><h3>几种使用 Java 操作 Zip 包的方法</h3><div class=info><em class="fas fa-calendar-day"></em><span class=date>Fri, May 20, 2022</span>
+<em class="fas fa-stopwatch"></em><span class=reading-time></span></div></div><p>该篇文章主要是讲述几种 Zip 包的方法和怎么使用 Java Jdk 操作 Zip 包的。</p><h2 id=几种方法>几种方法</h2><p>这里汇总了可以使用的工具类，开箱即用</p><ul><li><a href=https://hutool.cn/docs/#/core/%E5%B7%A5%E5%85%B7%E7%B1%BB/%E5%8E%8B%E7%BC%A9%E5%B7%A5%E5%85%B7-ZipUtil>Hutool ZipUtil</a></li><li><a href=https://ant.apache.org/manual/Tasks/zip.html>Ant Zip</a></li><li><a href=https://commons.apache.org/proper/commons-compress/zip.html>Apache Commons compress</a></li><li>JDK 的方式</li></ul><p>当然还有其他的方式。下面以 JDK 的方式为例讲述怎么实现文件的压缩和解压缩过程。</p><h2 id=jdk-方式>JDK 方式</h2><h3 id=压缩>压缩</h3><p>核心的类位于 java.util.zip 包中，其中有个 ZipEntry， 这个是表示了 Zip 每个节点，包含了所有文件夹和文件。比如下面的文件路径</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>dir222
+    |-- file1.md
+    |-- file2.md
+    |-- dir223
+        |- file3.md
+</code></pre></div><p>如果将 dir222 压缩成 zip 包。 大体思路如下</p><ul><li>获取合法路径下的所有文件， 可以递归获取</li><li>根据要保存的 zip 包，声明文件输出流和 Zip 输出流。文件输出流是 zip 包的实体，而 Zip 输出流是 zip 包的内容。有点类似于 docker 中的 image 和 container。</li><li>遍历所有文件信息，生成相应的 zipEntry， zipEntry 的名称就是文件名。将每个文件的输入流写入到 Zip 包的输出流中。 一个文件对应一个 ZipEntry， 每个 ZipEntry 写完后都需要关闭。</li></ul><p>使用技巧： <code>try() {}</code> 语法，该语法会自动关闭相应的流。</p><p>具体代码如下：</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java><span class=cm>/**
+</span><span class=cm> * 递归获取对应的文件 * * @param file
+</span><span class=cm> * @return
+</span><span class=cm> */</span>
+<span class=kd>private</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>getAllFile</span><span class=o>(</span><span class=n>File</span> <span class=n>file</span><span class=o>,</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>File</span><span class=o>&gt;</span> <span class=n>af</span><span class=o>)</span> <span class=o>{</span>
+        <span class=k>if</span> <span class=o>(</span><span class=n>file</span><span class=o>.</span><span class=na>isDirectory</span><span class=o>())</span> <span class=o>{</span>
+            <span class=n>File</span><span class=o>[]</span> <span class=n>files</span> <span class=o>=</span> <span class=n>file</span><span class=o>.</span><span class=na>listFiles</span><span class=o>();</span>
+            <span class=k>if</span> <span class=o>(</span><span class=n>Objects</span><span class=o>.</span><span class=na>nonNull</span><span class=o>(</span><span class=n>files</span><span class=o>))</span> <span class=o>{</span>
+                <span class=k>for</span> <span class=o>(</span><span class=n>File</span> <span class=n>f</span> <span class=o>:</span> <span class=n>files</span><span class=o>)</span> <span class=o>{</span>
+                    <span class=n>getAllFile</span><span class=o>(</span><span class=n>f</span><span class=o>,</span> <span class=n>af</span><span class=o>);</span>
+                <span class=o>}</span>
+            <span class=o>}</span>
+        <span class=o>}</span>
+
+        <span class=k>if</span> <span class=o>(</span><span class=n>file</span><span class=o>.</span><span class=na>isFile</span><span class=o>())</span> <span class=o>{</span>
+            <span class=n>af</span><span class=o>.</span><span class=na>add</span><span class=o>(</span><span class=n>file</span><span class=o>);</span>
+        <span class=o>}</span>
+    <span class=o>}</span>
+
+
+    <span class=cm>/**
+</span><span class=cm>     * 将需要目录中的文件压缩成 zip
+</span><span class=cm>     *
+</span><span class=cm>     * @param filePath 需要压缩的路径
+</span><span class=cm>     * @param zipFile  压缩后的路径
+</span><span class=cm>     * @return
+</span><span class=cm>     */</span>
+    <span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>zip</span><span class=o>(</span><span class=n>String</span> <span class=n>filePath</span><span class=o>,</span> <span class=n>String</span> <span class=n>zipFile</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>IOException</span> <span class=o>{</span>
+        <span class=n>File</span> <span class=n>file</span> <span class=o>=</span> <span class=k>new</span> <span class=n>File</span><span class=o>(</span><span class=n>filePath</span><span class=o>);</span>
+
+        <span class=c1>// 如果路径不存在或者不是路径直接返回
+</span><span class=c1></span>        <span class=k>if</span> <span class=o>(!</span><span class=n>file</span><span class=o>.</span><span class=na>exists</span><span class=o>()</span> <span class=o>||</span> <span class=o>!</span><span class=n>file</span><span class=o>.</span><span class=na>isDirectory</span><span class=o>())</span> <span class=o>{</span>
+            <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;文件不存在或者不是目录&#34;</span><span class=o>);</span>
+            <span class=k>return</span><span class=o>;</span>
+        <span class=o>}</span>
+
+        <span class=n>List</span><span class=o>&lt;</span><span class=n>File</span><span class=o>&gt;</span> <span class=n>allFiles</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;&gt;();</span>
+        <span class=n>getAllFile</span><span class=o>(</span><span class=n>file</span><span class=o>,</span> <span class=n>allFiles</span><span class=o>);</span>
+
+        <span class=k>try</span> <span class=o>(</span>
+                <span class=c1>// 文件输出流
+</span><span class=c1></span>                <span class=n>FileOutputStream</span> <span class=n>outputStream</span> <span class=o>=</span> <span class=k>new</span> <span class=n>FileOutputStream</span><span class=o>(</span><span class=n>zipFile</span><span class=o>);</span>
+                <span class=c1>// zip 包输出流
+</span><span class=c1></span>                <span class=n>ZipOutputStream</span> <span class=n>zipOutputStream</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ZipOutputStream</span><span class=o>(</span><span class=n>outputStream</span><span class=o>))</span> <span class=o>{</span>
+            <span class=k>for</span> <span class=o>(</span><span class=n>File</span> <span class=n>f</span> <span class=o>:</span> <span class=n>allFiles</span><span class=o>)</span> <span class=o>{</span>
+                <span class=kt>byte</span><span class=o>[]</span> <span class=n>buffer</span> <span class=o>=</span> <span class=k>new</span> <span class=kt>byte</span><span class=o>[</span><span class=n>2048</span><span class=o>];</span>
+                <span class=n>String</span> <span class=n>name</span> <span class=o>=</span> <span class=n>f</span><span class=o>.</span><span class=na>getAbsolutePath</span><span class=o>().</span><span class=na>substring</span><span class=o>(</span><span class=n>file</span><span class=o>.</span><span class=na>getAbsolutePath</span><span class=o>().</span><span class=na>length</span><span class=o>()</span> <span class=o>+</span> <span class=n>1</span><span class=o>);</span>
+                <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=n>f</span><span class=o>.</span><span class=na>getAbsolutePath</span><span class=o>()</span> <span class=o>+</span> <span class=s>&#34;=====&#34;</span> <span class=o>+</span> <span class=n>name</span><span class=o>);</span>
+                <span class=c1>// 设置 entry 节点
+</span><span class=c1></span>                <span class=n>ZipEntry</span> <span class=n>zipEntry</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ZipEntry</span><span class=o>(</span><span class=n>name</span><span class=o>);</span>
+                <span class=n>zipOutputStream</span><span class=o>.</span><span class=na>putNextEntry</span><span class=o>(</span><span class=n>zipEntry</span><span class=o>);</span>
+
+                <span class=c1>// 写入数据流
+</span><span class=c1></span>                <span class=k>try</span> <span class=o>(</span><span class=n>FileInputStream</span> <span class=n>fileInputStream</span> <span class=o>=</span> <span class=k>new</span> <span class=n>FileInputStream</span><span class=o>(</span><span class=n>f</span><span class=o>))</span> <span class=o>{</span>
+                    <span class=kt>int</span> <span class=n>read</span><span class=o>;</span>
+                    <span class=k>while</span> <span class=o>((</span><span class=n>read</span> <span class=o>=</span> <span class=n>fileInputStream</span><span class=o>.</span><span class=na>read</span><span class=o>(</span><span class=n>buffer</span><span class=o>,</span> <span class=n>0</span><span class=o>,</span> <span class=n>buffer</span><span class=o>.</span><span class=na>length</span><span class=o>))</span> <span class=o>&gt;</span> <span class=n>0</span><span class=o>)</span> <span class=o>{</span>
+                        <span class=n>zipOutputStream</span><span class=o>.</span><span class=na>write</span><span class=o>(</span><span class=n>buffer</span><span class=o>,</span> <span class=n>0</span><span class=o>,</span> <span class=n>read</span><span class=o>);</span>
+                    <span class=o>}</span>
+                <span class=o>}</span>
+
+                <span class=n>zipOutputStream</span><span class=o>.</span><span class=na>closeEntry</span><span class=o>();</span>
+            <span class=o>}</span>
+        <span class=o>}</span>
+    <span class=o>}</span>
+</code></pre></div><h3 id=解压>解压</h3><p>大体思路如下：</p><ol><li>使用 zip 包生成 zipInputStream， 遍历 ZipInputStream 直到没有 nextEntry， 这样通过 getNextEntry 获取到 ZipEntry。</li><li>根据 entry 中的名称，创建相应的文件夹。</li><li>将 当前 entry 的 ZipInputStream 读取到 buffer 中。 将 buffer 中的内容写入到 file 中。</li></ol><p>具体代码如下</p><div class=highlight><pre class=chroma><code class=language-java data-lang=java>
+<span class=kd>public</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>unzip</span><span class=o>(</span><span class=n>String</span> <span class=n>zipFile</span><span class=o>,</span> <span class=n>String</span> <span class=n>decompressPath</span><span class=o>)</span> <span class=kd>throws</span> <span class=n>IOException</span> <span class=o>{</span>
+    <span class=c1>// 这里可以优化，目前只支持一层的外部路径
+</span><span class=c1></span>    <span class=n>Path</span> <span class=n>path</span> <span class=o>=</span> <span class=n>Paths</span><span class=o>.</span><span class=na>get</span><span class=o>(</span><span class=n>decompressPath</span><span class=o>);</span>
+    <span class=n>File</span> <span class=n>decompressPathFile</span> <span class=o>=</span> <span class=n>path</span><span class=o>.</span><span class=na>toFile</span><span class=o>();</span>
+    <span class=k>if</span> <span class=o>(!</span><span class=n>decompressPathFile</span><span class=o>.</span><span class=na>exists</span><span class=o>())</span> <span class=o>{</span>
+        <span class=n>decompressPathFile</span><span class=o>.</span><span class=na>mkdirs</span><span class=o>();</span>
+    <span class=o>}</span>
+
+    <span class=k>try</span> <span class=o>(</span>
+    <span class=n>FileInputStream</span> <span class=n>fileInputStream</span> <span class=o>=</span> <span class=k>new</span> <span class=n>FileInputStream</span><span class=o>(</span><span class=n>zipFile</span><span class=o>);</span>
+    <span class=n>ZipInputStream</span> <span class=n>zipInputStream</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ZipInputStream</span><span class=o>(</span><span class=n>fileInputStream</span><span class=o>))</span> <span class=o>{</span>
+
+        <span class=n>ZipEntry</span> <span class=n>zipEntry</span><span class=o>;</span>
+        <span class=kt>byte</span><span class=o>[]</span> <span class=n>buffer</span> <span class=o>=</span> <span class=k>new</span> <span class=kt>byte</span><span class=o>[</span><span class=n>2048</span><span class=o>];</span>
+        <span class=k>while</span> <span class=o>((</span><span class=n>zipEntry</span> <span class=o>=</span> <span class=n>zipInputStream</span><span class=o>.</span><span class=na>getNextEntry</span><span class=o>())</span> <span class=o>!=</span> <span class=kc>null</span><span class=o>)</span> <span class=o>{</span>
+            <span class=n>Path</span> <span class=n>formatPath</span> <span class=o>=</span> <span class=n>path</span><span class=o>.</span><span class=na>resolve</span><span class=o>(</span><span class=n>zipEntry</span><span class=o>.</span><span class=na>getName</span><span class=o>());</span>
+            <span class=k>if</span> <span class=o>(</span><span class=n>zipEntry</span><span class=o>.</span><span class=na>getName</span><span class=o>().</span><span class=na>contains</span><span class=o>(</span><span class=s>&#34;/&#34;</span><span class=o>))</span> <span class=o>{</span>
+                <span class=n>mkdirAllDir</span><span class=o>(</span><span class=n>zipEntry</span><span class=o>.</span><span class=na>getName</span><span class=o>(),</span> <span class=n>decompressPath</span><span class=o>);</span>
+            <span class=o>}</span>
+            <span class=k>try</span> <span class=o>(</span>
+                    <span class=c1>// 文件输出流
+</span><span class=c1></span>                    <span class=n>FileOutputStream</span> <span class=n>fos</span> <span class=o>=</span> <span class=k>new</span> <span class=n>FileOutputStream</span><span class=o>(</span><span class=n>formatPath</span><span class=o>.</span><span class=na>toFile</span><span class=o>());</span>
+                    <span class=c1>// 内容输出流
+</span><span class=c1></span>                    <span class=n>BufferedOutputStream</span> <span class=n>bos</span> <span class=o>=</span> <span class=k>new</span> <span class=n>BufferedOutputStream</span><span class=o>(</span><span class=n>fos</span><span class=o>,</span> <span class=n>buffer</span><span class=o>.</span><span class=na>length</span><span class=o>))</span> <span class=o>{</span>
+                <span class=kt>int</span> <span class=n>read</span><span class=o>;</span>
+                <span class=k>if</span> <span class=o>((</span><span class=n>read</span> <span class=o>=</span> <span class=n>zipInputStream</span><span class=o>.</span><span class=na>read</span><span class=o>(</span><span class=n>buffer</span><span class=o>,</span> <span class=n>0</span><span class=o>,</span> <span class=n>buffer</span><span class=o>.</span><span class=na>length</span><span class=o>))</span> <span class=o>&gt;</span> <span class=n>0</span><span class=o>)</span> <span class=o>{</span>
+                    <span class=n>bos</span><span class=o>.</span><span class=na>write</span><span class=o>(</span><span class=n>buffer</span><span class=o>,</span> <span class=n>0</span><span class=o>,</span> <span class=n>read</span><span class=o>);</span>
+                <span class=o>}</span>
+            <span class=o>}</span>
+        <span class=o>}</span>
+    <span class=o>}</span>
+
+<span class=o>}</span>
+
+<span class=kd>private</span> <span class=kd>static</span> <span class=kt>void</span> <span class=nf>mkdirAllDir</span><span class=o>(</span><span class=n>String</span> <span class=n>name</span><span class=o>,</span> <span class=n>String</span> <span class=n>decompressPath</span><span class=o>)</span> <span class=o>{</span>
+    <span class=n>String</span><span class=o>[]</span> <span class=n>paths</span> <span class=o>=</span> <span class=n>name</span><span class=o>.</span><span class=na>split</span><span class=o>(</span><span class=s>&#34;/&#34;</span><span class=o>);</span>
+    <span class=n>StringBuilder</span> <span class=n>allPath</span> <span class=o>=</span> <span class=k>new</span> <span class=n>StringBuilder</span><span class=o>(</span><span class=n>decompressPath</span> <span class=o>+</span> <span class=s>&#34;/&#34;</span><span class=o>);</span>
+    <span class=k>for</span> <span class=o>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>0</span><span class=o>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>paths</span><span class=o>.</span><span class=na>length</span> <span class=o>-</span> <span class=n>1</span><span class=o>;</span> <span class=n>i</span><span class=o>++)</span> <span class=o>{</span>
+        <span class=n>allPath</span><span class=o>.</span><span class=na>append</span><span class=o>(</span><span class=n>paths</span><span class=o>[</span><span class=n>0</span><span class=o>]);</span>
+        <span class=k>if</span> <span class=o>(!</span><span class=k>new</span> <span class=n>File</span><span class=o>(</span><span class=n>allPath</span><span class=o>.</span><span class=na>toString</span><span class=o>()).</span><span class=na>mkdirs</span><span class=o>())</span> <span class=o>{</span>
+            <span class=n>System</span><span class=o>.</span><span class=na>out</span><span class=o>.</span><span class=na>println</span><span class=o>(</span><span class=s>&#34;创建文件失败！！&#34;</span><span class=o>);</span>
+            <span class=k>return</span><span class=o>;</span>        <span class=o>}</span>
+    <span class=o>}</span>
+<span class=o>}</span>
+</code></pre></div><h2 id=总结>总结</h2><p>通过上述的📦压缩包和解压缩包来看，几个比较重要的类：</p><ul><li>压缩 ：FileOutputStream、ZipOutputStream、ZipEntry、FileInputStream</li><li>解压缩：FileInputStream、ZipInputStream、ZipEntry、FileOutputStream、BufferedOutputStream</li></ul><p>上述实现的还不够灵活，hutool 实现的比较全。如果可以使用的话比较推荐它。代码详情：<a href=https://github.com/plutokaito/case-demo/blob/main/my-util/src/main/java/com/kaitoshy/utils/ZipUtil.java>ZipUtil</a></p></div><div class=post-footer><div class=info><span class=separator><a class=tag href=/tags/java/>java</a><a class=tag href=/tags/zip/>zip</a></span></div></div></div></div></div></div><script type=text/javascript src=/js/medium-zoom.min.83cb1dd5fea8d42d87d1e601a07faa73089ad0ef9ccfe5daf6041289ebcc4e46.js integrity="sha256-g8sd1f6o1C2H0eYBoH+qcwia0O+cz+Xa9gQSievMTkY=" crossorigin=anonymous></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2224MZXW3"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-Z2224MZXW3')</script><script async defer src=https://scripts.simpleanalyticscdn.com/latest.js></script><noscript><img src=https://queue.simpleanalyticscdn.com/noscript.gif alt></noscript></body></html>
