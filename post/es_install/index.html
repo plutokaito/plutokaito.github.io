@@ -30,7 +30,8 @@
   log   [10:31:16.200] [info][kibana-monitoring][monitoring][monitoring][plugins] Starting monitoring stats collection
   log   [10:31:16.325] [info][plugins][reporting] Browser executable: E:\tools\kibana-7.13.3-windows-x86_64\x-pack\plugins\reporting\chromium\chrome-win\chrome.exe
   log   [10:31:19.885] [info][plugins][securitySolution] Dependent plugin setup complete - Starting ManifestTask
-</code></pre></div><p>说明启动完成， 浏览器输入地址：http://localhost:5601，便能查看信息。</p><h2 id=检测>检测</h2><p>安装完 kibana 后，点击左侧菜单栏，找到 Dev Tools，点击后会有 console ，如下图所示
+</code></pre></div><p>说明启动完成， 浏览器输入地址：http://localhost:5601，便能查看信息。</p><p>启动时如果出现以下错误：</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>log [00:55:05.950] [error][data][elasticsearch] [resource_already_exists_exception]: index [.kibana_task_manager_1/JoeTE4-ZSLavsAOg2lhrXg] already exists
+</code></pre></div><p>可以在 cmd 命令行中使用命令：<code>curl -X DELETE http://localhost:9200/.kibana*</code> 删除相应的 index，然后重启即可</p><h2 id=检测>检测</h2><p>安装完 kibana 后，点击左侧菜单栏，找到 Dev Tools，点击后会有 console ，如下图所示
 <img src=/images/post/es/image-20210712110628418.png alt=kibana></p><p>在输入框中输入：</p><div class=highlight><pre class=chroma><code class=language-fallback data-lang=fallback>get _cat/nodes
 </code></pre></div><p>右侧会显示
 <img src=/images/post/es/image-20210712110737472.png alt=节点显示>
