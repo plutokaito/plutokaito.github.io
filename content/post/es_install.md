@@ -86,6 +86,12 @@ log   [10:31:15.260] [info][server][Kibana][http] http server running at http://
 
 说明启动完成， 浏览器输入地址：http://localhost:5601，便能查看信息。
 
+启动时如果出现以下错误：
+```log
+log [00:55:05.950] [error][data][elasticsearch] [resource_already_exists_exception]: index [.kibana_task_manager_1/JoeTE4-ZSLavsAOg2lhrXg] already exists
+```
+
+可以在 cmd 命令行中使用命令：`curl -X DELETE http://localhost:9200/.kibana*` 删除相应的 index，然后重启即可
 
 
 ## 检测
