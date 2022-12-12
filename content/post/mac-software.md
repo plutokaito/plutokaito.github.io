@@ -1,7 +1,7 @@
 ---
 title: "Mac 上常用的软件"
 date: 2021-06-08
-tags: ["software", "mac"]
+tags: ["软件", "mac"]
 description : "该篇文章主要记录自己在 mac 上常用的软件"
 ---
 该篇文章主要是主要记录自己在 mac 上常用的软件

@@ -1,7 +1,7 @@
 ---
 title: "SpringBoot 中如何使用 Validator 检测含有泛型的对象"
 date: 2022-03-19
-tags: ["spring", "validator"]
+tags: ["spring", "validator", "springboot"]
 description : "SpringBoot 中如何使用 Validator 检测含有泛型的对象"
 ---
 

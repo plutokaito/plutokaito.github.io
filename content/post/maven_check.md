@@ -1,7 +1,7 @@
 ---
 title: "如何在 MAVEN 项目中 checkstyle"
 date: 2022-03-12
-tags: ["代码规范", "maven-plugin"]
+tags: ["代码规范", "maven"]
 description : "如何在 MAVEN 项目中 checkstyle"
 ---
 本文章是记录了怎么简单的通过 MAVEN 的 checkstyle 插件进行代码规范的管理。
