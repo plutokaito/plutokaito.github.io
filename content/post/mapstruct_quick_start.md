@@ -1,3 +1,9 @@
+---
+title: "还在用 BeanUtils.copyProperties 么？来了解一下 MapStruct ？"
+date: 2024-01-18
+tags: ["Java"]
+description : "MapStruct 用于简化 Java 对象之间的映射，在编译时生成代码，提供对象映射的性能，并减少手动编写映射代码的工作。"
+---
 
 ## 作用
 MapStruct 用于简化 Java 对象之间的映射，在编译时生成代码，提供对象映射的性能，并减少手动编写映射代码的工作。 

@@ -1,6 +1,7 @@
 ---
 title: "Mac 上常用的软件"
 date: 2021-06-08
+edit: 2024-01-08
 tags: ["软件", "mac"]
 description : "该篇文章主要记录自己在 mac 上常用的软件"
 ---
@@ -42,9 +43,9 @@ api 工具
 ### 3. 办公套装
 - [WPS](https://www.wps.cn/)  办公软件，microsoft 系列的替代品
 - [Xmind Zen](https://www.xmind.cn/xmind/download/) 强大的脑图工具
-- [印象笔记](https://www.yinxiang.com/download/) 笔记工具
+- ~[印象笔记](https://www.yinxiang.com/download/) 笔记工具~ 从 2023 年底的时候换成了 [Obisidian](https://obsidian.md/), 如果需要多端同步可以使用坚果云。
 - 滴答清单 appStore 上直接下载
-- [Typora](https://typora.io/) 单机版笔记工具， md 的操作
+- ~[Typora](https://typora.io/) 单机版笔记工具， md 的操作~
 - [腾讯会议](https://meeting.tencent.com/download-center.html?from=1001) 视频会议的时候用到
 - [Keka压缩包](https://www.keka.io/zh-cn/) 开源的压缩包，满足日常解压缩
 - [deepL 翻译软件](https://www.deepl.com/macos/download/DeepL.dmg) 翻译工具
